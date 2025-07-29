@@ -46,4 +46,4 @@ Thumbs.db
 logs/
 
 # notes
-django.commands.md
+fastapi.commands.md
