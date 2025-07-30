@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from app.accounts.routes import router as accounts_router
 
 app = FastAPI(
     title="Client Analytics Async",
@@ -7,13 +7,4 @@ app = FastAPI(
     version="1.0.0",
 )
 
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.get("/health", tags=["Health"])
-async def health_check():
-    """Health check endpoint to verify the service is up and running."""
-    return {"status": "ok"}
+app.include_router(accounts_router)
