@@ -1,6 +1,13 @@
 # app/core/config.py
+import os
 from typing import Optional
 from pydantic_settings import BaseSettings
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+MEDIA_URL = "/media"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+UPLOAD_DIR = os.path.join(MEDIA_ROOT, "datasets")
 
 
 class Settings(BaseSettings):
@@ -24,16 +31,13 @@ class Settings(BaseSettings):
     
     # Configuración de base de datos
     DATABASE_URL: Optional[str] = None
-
-    # ✅ Agregadas las variables de PostgreSQL
-    POSTGRES_DB: str = "analytics_db"
-    POSTGRES_USER: str = "analytics_user" 
-    POSTGRES_PASSWORD: str = "password"
-    POSTGRES_HOST: str = "localhost"
-    POSTGRES_PORT: int = 5432
     
     # Configuración de ambiente
     ENVIRONMENT: str = "development"
+
+    @property
+    def database_url(self):
+        return self.DATABASE_URL
 
     class Config:
         """
