@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from app.accounts.routes import router as accounts_router
+from app.datasets.routes import router as datasets_router
+
 
 app = FastAPI(
     title="Client Analytics Async",
@@ -8,3 +10,4 @@ app = FastAPI(
 )
 
 app.include_router(accounts_router)
+app.include_router(datasets_router)
