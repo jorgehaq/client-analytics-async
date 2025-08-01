@@ -47,3 +47,7 @@ logs/
 
 # notes
 fastapi.commands.md
+
+cli.python.py
+init_db.py
+cli.py
