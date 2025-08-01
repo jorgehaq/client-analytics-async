@@ -51,3 +51,6 @@ fastapi.commands.md
 cli.python.py
 init_db.py
 cli.py
+
+app/media/datasets/*
+!app/media/datasets/.gitkeep
