@@ -1,30 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
-from jose import jwt, JWTError
-from app.accounts.schemas import Token, User, LoginRequest
-from app.accounts.services import login_user, get_user
-from app.core.config import settings
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/accounts/login")
+from fastapi import APIRouter, Depends
+from app.accounts.schemas import Token, UserResponse, LoginRequest
+from app.accounts.services import login_user, get_current_user
+from app.core.database import get_db
+from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/accounts", tags=["accounts"])
 
-
 @router.post("/login", response_model=Token)
-async def login(data: LoginRequest):
-    return login_user(data)
-
+async def login(data: LoginRequest, db: Session = Depends(get_db)):
+    return login_user(db, data)
     
-@router.get("/me", response_model=User)
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
-            raise HTTPException(status_code=401, detail="Invalid token")
-        return get_user(username)
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
-                            
-
-                    
+@router.get("/me", response_model=UserResponse)
+async def get_me(user=Depends(get_current_user)):
+    return user
